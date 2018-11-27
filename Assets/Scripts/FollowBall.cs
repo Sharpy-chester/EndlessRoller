@@ -5,13 +5,8 @@ using UnityEngine;
 public class FollowBall : MonoBehaviour {
 
     public GameObject ball;
-
-	void Start () {
-		
-	}
 	
 	void Update () {
         this.transform.position = new Vector3(ball.transform.position.x, ball.transform.position.y + 2, this.transform.position.z);
-
 	}
 }
