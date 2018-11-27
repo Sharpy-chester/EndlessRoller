@@ -12,7 +12,7 @@ public class Section : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (sectionID + 3 == sectionManager.sectionID)
+		if (sectionID + 2 == sectionManager.sectionID)
         {
             Destroy(this.gameObject);
         }
