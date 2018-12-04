@@ -16,20 +16,11 @@ public class SectionManager : MonoBehaviour {
     bool ballIsActive = true;
     Vector3 mCameraPos;
     Vector3 thisSecPos;
-    GameObject[] allRedObjects;
+    public Text deathText;
 
     void Awake()
     {
         mCameraPos = Camera.main.transform.position;
-        allRedObjects = GameObject.FindGameObjectsWithTag("Red");
-        for (int i = 0; i < allRedObjects.Length; i++)
-        {
-            allRedObjects[i].SetActive(false);
-        }
-        foreach (GameObject x in allRedObjects)
-        {
-            x.SetActive(false);
-        }
     }
 
     void Update () {
@@ -38,8 +29,8 @@ public class SectionManager : MonoBehaviour {
             if (ball.transform.position.x >= ballObjForSpawn.transform.position.x)
             {
                 int randomNum = Random.Range(0, sections.Count);
-                ballObjForSpawn.transform.localPosition = new Vector3(ballObjForSpawn.transform.localPosition.x + 24, ballObjForSpawn.transform.localPosition.y, ballObjForSpawn.transform.localPosition.z);
-                GameObject section = Instantiate(sections[randomNum], new Vector3(ballObjForSpawn.transform.position.x, ballObjForSpawn.transform.position.y, ballObjForSpawn.transform.position.z), this.transform.rotation);
+                ballObjForSpawn.transform.localPosition = new Vector3(ballObjForSpawn.transform.localPosition.x + 24 + sections[randomNum].transform.position.x, ballObjForSpawn.transform.localPosition.y + sections[randomNum].transform.position.y, ballObjForSpawn.transform.localPosition.z + sections[randomNum].transform.position.z);
+                GameObject section = Instantiate(sections[randomNum], ballObjForSpawn.transform.position, this.transform.rotation);
                 Section sectionScript = section.GetComponent<Section>();
                 thisSecPos = section.transform.position;
                 sectionID++;
@@ -49,15 +40,20 @@ public class SectionManager : MonoBehaviour {
             }
             if (ball.transform.position.y <= thisSecPos.y - 10)
             {
-
-                ballIsActive = false;
-                Destroy(ball);
-                gameOverScreen.SetActive(true);
+                GameOver("Fell off the ramp");
             }
             mCameraPos = new Vector3(ball.transform.position.x, ball.transform.position.y + 2, this.transform.position.z + -9.931f);
             Camera.main.transform.position = mCameraPos;
         }
         
+    }
+
+    public void GameOver(string howDied)
+    {
+        ballIsActive = false;
+        Destroy(ball);
+        gameOverScreen.SetActive(true);
+        deathText.text = howDied;
     }
 
     public void ReloadScene()
